@@ -29,7 +29,7 @@ Object.assign( WaveAnimation.prototype, {
         // Here you may include animations for other parts 
      
         let lowerArmTween = new TWEEN.Tween( {theta:0} )
-        .to( {theta:Math.PI }, 1000)
+        .to( {theta:Math.PI }, 3000)
         .onUpdate(function(){
             
             let right_lower_arm =  robot.getObjectByName("right_lower_arm");
@@ -38,7 +38,7 @@ Object.assign( WaveAnimation.prototype, {
 
             right_lower_arm.matrix.makeTranslation(0,0,0)
             .premultiply( new THREE.Matrix4().makeTranslation(-pivot.x, -pivot.y, -pivot.z ) )
-            .premultiply( new THREE.Matrix4().makeRotationZ(this._object.theta/6))
+            .premultiply( new THREE.Matrix4().makeRotationZ(this._object.theta/2))
             .premultiply( new THREE.Matrix4().makeTranslation(pivot.x, pivot.y, pivot.z ) )
             .premultiply( new THREE.Matrix4().makeTranslation(x, y, z ) );
     
@@ -50,14 +50,13 @@ Object.assign( WaveAnimation.prototype, {
            
             stats.update();
             renderer.render(scene, camera);    
-        })
+        }).easing(TWEEN.Easing.NossaFuncao.Sin)
 
 
 
 
-        //  upperArmTween.chain( ... ); this allows other related Tween animations occur at the same time
+        upperArmTween.chain( lowerArmTween );
         upperArmTween.start(); 
-        lowerArmTween.start();
     },
     animate: function(time) {
         window.requestAnimationFrame(this.animate.bind(this));
