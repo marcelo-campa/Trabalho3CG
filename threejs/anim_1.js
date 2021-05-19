@@ -4,7 +4,7 @@ Object.assign( WaveAnimation.prototype, {
 
     init: function() {
         let upperArmTween = new TWEEN.Tween( {theta:0} )
-            .to( {theta:Math.PI }, 500)
+            .to( {theta:Math.PI }, 300)
             .onUpdate(function(){
                 
                 let right_upper_arm =  robot.getObjectByName("right_upper_arm");
@@ -53,10 +53,63 @@ Object.assign( WaveAnimation.prototype, {
         }).easing(TWEEN.Easing.NossaFuncao.Sin)
 
 
+        let leftlowArmTween = new TWEEN.Tween( {theta:0} )
+            .to( {theta:Math.PI }, 300)
+            .onUpdate(function(){
+                
+                let left_lower_arm =  robot.getObjectByName("left_lower_arm");
+                let [x,y,z]= [left_lower_arm.position.x,left_lower_arm.position.y,left_lower_arm.position.z];
+                let pivot = {x:0, y:1.7,z:0};
+
+                left_lower_arm.matrix.makeTranslation(0,0,0)
+                .premultiply( new THREE.Matrix4().makeTranslation(-pivot.x, -pivot.y, -pivot.z ) )
+                .premultiply( new THREE.Matrix4().makeRotationZ(-this._object.theta/18))
+                .premultiply( new THREE.Matrix4().makeTranslation(pivot.x, pivot.y, pivot.z ) )
+                .premultiply( new THREE.Matrix4().makeTranslation(x, y, z ) );
+        
+            
 
 
+                left_lower_arm.updateMatrixWorld(true);
+            
+               
+                stats.update();
+                renderer.render(scene, camera);    
+            })
+
+
+            let headtween = new TWEEN.Tween( {theta:0} )
+            .to( {theta:Math.PI }, 600)
+            .onUpdate(function(){
+                
+                let head =  robot.getObjectByName("head");
+                let [x,y,z]= [head.position.x,head.position.y,head.position.z];
+                let pivot = {x:0, y:1.7,z:0};
+
+                head.matrix.makeTranslation(0,0,0)
+                .premultiply( new THREE.Matrix4().makeTranslation(-pivot.x, -pivot.y, -pivot.z ) )
+                .premultiply( new THREE.Matrix4().makeRotationZ(-this._object.theta/18))
+                .premultiply( new THREE.Matrix4().makeTranslation(pivot.x, pivot.y, pivot.z ) )
+                .premultiply( new THREE.Matrix4().makeTranslation(x, y, z ) );
+        
+            
+
+                //console.log(head.position.x,head.position.y,head.position.z);
+                head.updateMatrixWorld(true);
+               
+                stats.update();
+                renderer.render(scene, camera);    
+            })
+
+
+
+        
         upperArmTween.chain( lowerArmTween );
         upperArmTween.start(); 
+        leftlowArmTween.delay(650);
+        leftlowArmTween.start();
+        headtween.start(650);
+        
     },
     animate: function(time) {
         window.requestAnimationFrame(this.animate.bind(this));
