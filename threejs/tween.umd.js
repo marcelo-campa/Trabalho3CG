@@ -280,7 +280,15 @@
                 return Math.abs(Math.sin(amount * 3 * Math.PI));
             },
             Abs: function(amount) {
-                return -Math.abs(amount - 0.5) + 0.5
+                return (-Math.abs(amount - 0.5) + 0.5)*2
+            },
+            constantAbs: function(amount) {
+                if(amount >= 0.25 && amount <= 0.75)
+                    return 1
+                else if (amount < 0.25)
+                    return (-Math.abs(amount * 2 - 0.5) + 0.5) * 2;
+                else 
+                    return (-Math.abs(amount * 2 - 1.5) + 0.5) * 2;
             }
         }
     };
