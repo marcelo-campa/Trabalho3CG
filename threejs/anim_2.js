@@ -1,8 +1,8 @@
 
 
-function anim2() {}
+function Comemorando() {}
 
-Object.assign( anim2.prototype, {
+Object.assign( Comemorando.prototype, {
 
     init: function() {
 
